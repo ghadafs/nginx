@@ -1,0 +1,37 @@
+name: Build, Push Docker Image, and Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-push-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Build and Push Docker Image
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        IMAGE_TAG=${{ github.sha }}
+        DOCKER_IMAGE=docker.io/ghadafs/nginx:${IMAGE_TAG}
+        docker build -t $DOCKER_IMAGE .
+        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD docker.io
+        docker push $DOCKER_IMAGE
+
+    - name: Update Deployment YAML
+      run: |
+        sed -i "s#docker.io.*#docker.io/ghadafs/nginx:${{ github.sha }}#g" deployment.yaml
+
+    - name: Commit and Push Updated Deployment YAML
+      run: |
+        git config --local user.email "galfaris910@gmail.com"
+        git config --local user.name "ghadafs"
+        git add deployment.yaml
+        git commit -m "Update deployment.yaml with new image tag"
+        git push
