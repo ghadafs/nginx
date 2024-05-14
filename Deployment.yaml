@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: my-nginx-container
-        image: docker.io/ghadafs/nginx:e3f23b9ea9da418cce8aec856ba13d1abefcb469
+        image: docker.io/ghadafs/nginx:9121234c1336eba89cd14ded3566100a9b17e3a1
         ports:
         - containerPort: 80
