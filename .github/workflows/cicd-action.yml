@@ -23,15 +23,34 @@ jobs:
         docker build -t $DOCKER_IMAGE .
         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD docker.io
         docker push $DOCKER_IMAGE
+  
+  update-manifest-stage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: ghadafs/nginx-application
+          ref: 'main'
+          token: ${{ secrets.G_TOKEN2 }}
+      - name: setup git config
+        run: |
+          git config --global user.email "galfaris910@gmail.com"
+          git config --global user.name "ghadafs"
+          echo ${{ github.sha }}
+          sed -i "s#${{ github.actor }}.*#${{ github.actor }}/nginx:${{ github.sha }}#g" Deployment.yaml
+          git add -A
+          git commit -am "Update image for - ${{ github.sha }}"
+      - run: echo ${{ github }}
+      - run: git push origin main
 
-    - name: Update Deployment YAML
-      run: |
-        sed -i "s#docker.io.*#docker.io/ghadafs/nginx:${{ github.sha }}#g" Deployment.yaml
-
-    - name: Commit and Push Updated Deployment YAML
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add Deployment.yaml
-        git commit -m "Update Deployment.yaml with new image tag"
-        git push
+#    - name: Update Deployment YAML
+#      run: |
+#        sed -i "s#docker.io.*#docker.io/ghadafs/nginx:${{ github.sha }}#g" Deployment.yaml
+#
+#    - name: Commit and Push Updated Deployment YAML
+#      run: |
+#        git config --local user.email "action@github.com"
+#        git config --local user.name "GitHub Action"
+#        git add Deployment.yaml
+#        git commit -m "Update Deployment.yaml with new image tag"
+#        git push
