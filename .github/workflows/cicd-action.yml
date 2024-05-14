@@ -30,8 +30,8 @@ jobs:
 
     - name: Commit and Push Updated Deployment YAML
       run: |
-        git config --local user.email "galfaris910@gmail.com"
-        git config --local user.name "ghadafs"
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
         git add Deployment.yaml
         git commit -m "Update Deployment.yaml with new image tag"
         git push
