@@ -33,5 +33,5 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add Deployment.yaml
-        git commit -m "Update Deployment.yaml with the new image tag"
+        git commit -m "Updated with new image tag! :)"
         git push
