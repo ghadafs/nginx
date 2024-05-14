@@ -32,6 +32,6 @@ jobs:
       run: |
         git config --local user.email "galfaris910@gmail.com"
         git config --local user.name "ghadafs"
-        git add deployment.yaml
-        git commit -m "Update deployment.yaml with new image tag"
+        git add Deployment.yaml
+        git commit -m "Update Deployment.yaml with new image tag"
         git push
