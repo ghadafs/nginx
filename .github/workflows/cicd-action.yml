@@ -26,7 +26,7 @@ jobs:
 
     - name: Update Deployment YAML
       run: |
-        sed -i "s#docker.io.*#docker.io/ghadafs/nginx-application:${{ github.sha }}#g" Deployment.yaml
+        sed -i "s#docker.io.*#docker.io/ghadafs/nginx:${{ github.sha }}#g" Deployment.yaml
 
     - name: Commit and Push Updated Deployment YAML
       run: |
