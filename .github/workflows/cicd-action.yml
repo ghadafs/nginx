@@ -1,4 +1,4 @@
-name: Build, Push Docker Image, and Deploy to Kubernetes
+name: CICD Workflow - github - docker - argocd
 
 on:
   push:
@@ -6,14 +6,14 @@ on:
       - main
 
 jobs:
-  build-push-deploy:
+  cicd-build-push-deploy:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Build and Push Docker Image
+    - name: Build and Push Docker Image to DockerHub
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -24,7 +24,7 @@ jobs:
         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD docker.io
         docker push $DOCKER_IMAGE
   
-    - name: Update Deployment YAML
+    - name: Update the Deployment YAML file
       run: |
         sed -i "s#docker.io.*#docker.io/ghadafs/nginx:${{ github.sha }}#g" Deployment.yaml
 
@@ -33,5 +33,5 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add Deployment.yaml
-        git commit -m "Update Deployment.yaml with new image tag"
+        git commit -m "Update Deployment.yaml with the new image tag"
         git push
