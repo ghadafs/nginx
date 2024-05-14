@@ -29,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: ghadafs/nginx-application
+          repository: ghadafs/nginx
           ref: 'main'
           token: ${{ secrets.G_TOKEN2 }}
       - name: setup git config
